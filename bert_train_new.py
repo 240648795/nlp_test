@@ -10,23 +10,10 @@ from keras.models import Model
 from keras.optimizers import Adam
 from keras.utils import to_categorical
 from sklearn import metrics
-
 # 读取训练集和测试集
 from sklearn.model_selection import train_test_split
-
 # 参数配置
 from sklearn.preprocessing import LabelEncoder
-
-maxlen = 100  # 设置序列长度为100，要保证序列长度不超过512
-Batch_size = 16  # 批量运行的个数
-Epoch = 1  # 迭代次数
-
-# 预训练好的模型 bert base
-config_path = r'bert\bert_config.json'  # 加载配置文件
-checkpoint_path = r'bert\bert_model.ckpt'
-dict_path = r'bert\vocab.txt'
-raw_data_path = r'data\quality\quality_clear_data_element.csv'
-
 
 def get_train_test_data(data_path):
     """
@@ -227,7 +214,17 @@ def acc_top2(y_true, y_pred):
     """
     return top_k_categorical_accuracy(y_true, y_pred, k=2)
 
-#
+
+maxlen = 100  # 设置序列长度为100，要保证序列长度不超过512
+Batch_size = 16  # 批量运行的个数
+Epoch = 1  # 迭代次数
+
+# 预训练好的模型 bert base
+config_path = r'bert\bert_config.json'  # 加载配置文件
+checkpoint_path = r'bert\bert_model.ckpt'
+dict_path = r'bert\vocab.txt'
+raw_data_path = r'data\quality\quality_clear_data_element.csv'
+
 if __name__ == '__main__':
     # 训练和预测
     train_pred, test_pred, y_true, model, data_test, nclass, encoder = run_kb()
@@ -236,7 +233,7 @@ if __name__ == '__main__':
     # 评估测试集
     bk_metrics(test_pred, [np.argmax(x) for x in data_test[:, 1]], type=' test metrics')
     # 将模型保存
-    model_path = r'model//bert_model_new.h5'
+    model_path = r'model/bert_model_new.h5'
     model.save(model_path)
     # 将encoder也保存,类别数目也保存
     model_details = {}
